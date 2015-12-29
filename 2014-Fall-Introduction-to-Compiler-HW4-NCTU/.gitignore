@@ -1,0 +1,8 @@
+.DS_STORE
+lex.yy.c
+y.output
+y.tab.c
+y.tab.h
+parser
+*.o
+*.j

@@ -1,0 +1,48 @@
+Program flow of AcDc
+===
+
++ main
+    + parser
+        + parseDeclarations
+            + scanner
+                + getNumericToken
+            + parseDeclaration
+                + scanner
+                + makeDeclarationNode
+            + parseDeclarations 
+            + makeDeclarationTree
+        + parseStatements 
+            + scanner
+            + parseStatement
+                + scanner
+                + parseValue
+                    + scanner
+                + parseExpression
+                    + scanner
+                    + parseValue
+                    + parseExpressionTail
+                        + scanner
+                        + parseExpressionTail
+                + makeAssignmentNode
+                + makePrintNode
+            + parseStatements
+            + makeStatementTree 
+    + build
+        + InitializeTable
+        + add_table 
+    + check
+        + checkstmt
+            + checkexpression
+                + lookup_table
+                + checkexpression
+                + generalize
+                + convertType
+            + lookup_table
+            + convertType
+    + gencode
+        + fprint_expr
+            + fprint_expr
+            + fprint_op
++ debug
+    + print_expr
+    + test_parser 

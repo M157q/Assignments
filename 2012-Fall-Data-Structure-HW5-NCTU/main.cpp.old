@@ -1,0 +1,127 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  main.cpp
+ *
+ *    Description:  DS Project5 - Graph
+ *
+ *        Version:  1.0
+ *        Created:  2012年12月11日 23時26分15秒
+ *       Revision:  none
+ *       Compiler:  g++ 4.6.3
+ *
+ *         Author:  shunyi
+ *   Organization:  NCTUCS 
+ *
+ * =====================================================================================
+ */
+#include <iostream>
+#include <cstring>
+#include <fstream>
+#include <cstdlib>
+#include <cstdio>
+
+//#include "Graph.h"
+
+using namespace std;
+
+int table[1000][1000];  //store the weight of edge
+
+void tableInitialize(void)
+{
+    //initailize the table
+    for(int i = 0; i < 1000; i++)
+        for(int j = 0; j < 1000; j++)
+            table[i][j] = -1;
+}
+
+void printMST()
+{
+    
+}
+
+void printShortest(int vs1, int vs2)
+{
+
+}
+
+void getinput(char* buffer, int* vertex, int* edge, int* v1, int* v2, int* w, int* vs1, int* vs2, int* line_count)
+{
+    char *f1, *f2, *f3;
+    f1 = strtok(buffer, " \n");
+    f2 = strtok(NULL, " \n");
+    f3 = strtok(NULL, "\n");
+
+    if(*line_count == 1 && f1 != NULL) //1st line
+    {  
+        *vertex = atoi(f1);   //get the value of v
+        cout << "vertex: " << *vertex << endl;
+    }
+    else if(*line_count == 2 && f1 != NULL) //2nd line
+    {
+        *edge   = atoi(f1);   //get the value of e
+        cout << "edge: " << *edge << endl;
+    }
+    else if(*line_count <= *edge + 2) //3rd to (e+2)th line
+    {   //get edge information (v1, v2, weight)
+        *v1 = atoi(f1);
+        *v2 = atoi(f2);
+        *w  = atoi(f3);
+        printf("(%d, %d, %d)\n", *v1, *v2, *w); 
+        table[*v1][*v2] = *w;
+        table[*v2][*v1] = *w;
+    }
+    else    //(e+3)th to (n-1)th line
+    {   //find the shortest path of each pair
+        *vs1 = atoi(f1);
+        *vs2 = atoi(f2);
+        //printf("(%d, %d)\n", *vs1, *vs2); 
+        printShortest(*vs1, *vs2);
+    }
+
+    if(*line_count == *edge+2 && *edge != -1) //output the MST
+    {
+        // cout << "Here should output the MST." << endl;
+        printMST();
+    }
+}
+
+int main(int argc, const char *argv[])
+{
+    if(argc == 2){
+        ifstream infile;
+        infile.open(argv[1], ifstream::in);
+        if(!infile.good()){
+            cout << "error while open file or file doesn't exist." << endl;
+            return 1;
+        }
+        char buffer[2048];
+        int vertex = -1, edge = -1;   //total vertex and edge
+        int line_count = 1;
+        tableInitialize();
+
+        while(infile.good()){
+            infile.getline(buffer, 2048);
+            int l = strlen(buffer);
+            buffer[l] = '\n';
+            buffer[l+1] = '\0';
+
+            if(buffer[0] == 'z'){
+                tableInitialize();
+                line_count = 1;
+                continue;
+            }
+            if(buffer[0] == 'x') break;
+
+            int v1 = -1, v2 = -1, w = -1;      //for edge information
+            int vs1 = -1, vs2 = -1;            //for shortest path
+            getinput(buffer, &vertex, &edge, &v1, &v2, &w, &vs1, &vs2, &line_count);
+            line_count++;
+        }
+        infile.close();
+    }
+    else cout << "argc is not equal to 2." << endl;
+
+    return 0;
+}
+
